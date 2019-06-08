@@ -19,12 +19,12 @@ if (PROD) {
 module.exports = {
   context: __dirname + "/src",
   entry: {
-    "playkit-ott-analytics": "index.js"
+    "pakhshkit-ott-analytics": "index.js"
   },
   output: {
     path: __dirname + "/dist",
     filename: '[name].js',
-    library: ["playkit", "ottanalytics"],
+    library: ["pakhshkit", "ottanalytics"],
     libraryTarget: "umd",
     devtoolModuleFilenameTemplate: "./ott-analytics/[resource-path]"
   },
@@ -66,17 +66,17 @@ module.exports = {
     ]
   },
   externals: {
-    "playkit-js": {
-      commonjs: "playkit-js",
-      commonjs2: "playkit-js",
-      amd: "playkit-js",
-      root: ["playkit", "core"]
+    "pakhshkit-js": {
+      commonjs: "pakhshkit-js",
+      commonjs2: "pakhshkit-js",
+      amd: "pakhshkit-js",
+      root: ["pakhshkit", "core"]
     },
-    "playkit-js-providers": {
-      commonjs: "playkit-js-providers",
-      commonjs2: "playkit-js-providers",
-      amd: "playkit-js-providers",
-      root: ["playkit", "providers"]
+    "pakhshkit-js-providers": {
+      commonjs: "pakhshkit-js-providers",
+      commonjs2: "pakhshkit-js-providers",
+      amd: "pakhshkit-js-providers",
+      root: ["pakhshkit", "providers"]
     }
   }
 };

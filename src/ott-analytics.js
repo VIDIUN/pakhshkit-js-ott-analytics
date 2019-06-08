@@ -1,6 +1,6 @@
 //@flow
-import {BasePlugin, Error, FakeEvent} from 'playkit-js'
-import {OTTBookmarkService, RequestBuilder} from 'playkit-js-providers/dist/playkit-bookmark-service'
+import {BasePlugin, Error, FakeEvent} from 'pakhshkit-js'
+import {OTTBookmarkService, RequestBuilder} from 'pakhshkit-js-providers/dist/pakhshkit-bookmark-service'
 
 type OttAnalyticsEventType = { [event: string]: string };
 const MEDIA_TYPE = 'MEDIA';
@@ -240,7 +240,7 @@ export default class OttAnalytics extends BasePlugin {
       position: params.position,
       playerData: playerData
     };
-    const request: RequestBuilder = OTTBookmarkService.add(this.config.serviceUrl, this.config.ks, bookMark);
+    const request: RequestBuilder = OTTBookmarkService.add(this.config.serviceUrl, this.config.vs, bookMark);
     request.doHttpRequest()
       .then((data) => {
         if (data === CONCURRENT) {

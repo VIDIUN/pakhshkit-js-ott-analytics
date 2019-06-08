@@ -1,17 +1,17 @@
 import '../../src/index'
-import {loadPlayer, Error, FakeEvent, EventType} from 'playkit-js'
-import * as TestUtils from 'playkit-js/test/src/utils/test-utils'
+import {loadPlayer, Error, FakeEvent, EventType} from 'pakhshkit-js'
+import * as TestUtils from 'pakhshkit-js/test/src/utils/test-utils'
 
 describe('OttAnalyticsPlugin', function () {
   let player, sandbox, sendSpy, config;
 
   /**
-   * @param {string} ks - ks
+   * @param {string} vs - vs
    * @param {Object} bookmark - event
    * @return {void}
    */
-  function verifyPayloadProperties(ks, bookmark) {
-    ks.should.equal(player.config.session.ks);
+  function verifyPayloadProperties(vs, bookmark) {
+    vs.should.equal(player.config.session.vs);
     bookmark.id.should.equal(player.config.id);
     if (bookmark.duration) {
       bookmark.duration.should.equal(player.duration);
@@ -25,7 +25,7 @@ describe('OttAnalyticsPlugin', function () {
       "name": "Big Hero 6",
       "session": {
         "partnerId": 198,
-        "ks": "djJ8MTk4fPIz_ugsVrW8JwEX7detBwnuNZq2YVowN9VlB1d8gkHLY1wR6-GaeGYBxD6XBQ6SvDw6crDHhFpvsi7jcudRS2t1bSNFgIT5H2sZrHAGg_uasYXV6YHsm43_d_PsKgmnunAjFniOYXggUo8cT9RtSPo="
+        "vs": "djJ8MTk4fPIz_ugsVrW8JwEX7detBwnuNZq2YVowN9VlB1d8gkHLY1wR6-GaeGYBxD6XBQ6SvDw6crDHhFpvsi7jcudRS2t1bSNFgIT5H2sZrHAGg_uasYXV6YHsm43_d_PsKgmnunAjFniOYXggUo8cT9RtSPo="
       },
       "sources": {
         "progressive": [{
@@ -36,7 +36,7 @@ describe('OttAnalyticsPlugin', function () {
         "dash": [],
         "hls": [{
           "id": "397008,applehttp",
-          "url": "//api-preprod.ott.kaltura.com/v4_7/api_v3/service/assetFile/action/playManifest/partnerId/198/assetId/258457/assetType/media/assetFileId/397008/contextType/TRAILER/a.m3u8",
+          "url": "//api-preprod.ott.vidiun.com/v4_7/api_v3/service/assetFile/action/playManifest/partnerId/198/assetId/258457/assetType/media/assetFileId/397008/contextType/TRAILER/a.m3u8",
           "mimetype": "application/x-mpegURL"
         }],
         "type": "Vod",
@@ -61,7 +61,7 @@ describe('OttAnalyticsPlugin', function () {
       "ottAnalytics": {
         "entryId": config.id,
         "fileId": "392026",
-        "ks": config.session.ks,
+        "vs": config.session.vs,
         "partnerId": config.session.partnerId,
         "mediaHitInterval": 2
       }
@@ -71,9 +71,9 @@ describe('OttAnalyticsPlugin', function () {
   beforeEach(function () {
     sandbox = sinon.sandbox.create();
     sendSpy = sandbox.spy(XMLHttpRequest.prototype, 'send');
-    config.plugins.ottAnalytics.ks = config.session.ks;
+    config.plugins.ottAnalytics.vs = config.session.vs;
     config.plugins.ottAnalytics.isAnonymous = false;
-    config.plugins.ottAnalytics.serviceUrl = "//api-preprod.ott.kaltura.com/v4_7/api_v3";
+    config.plugins.ottAnalytics.serviceUrl = "//api-preprod.ott.vidiun.com/v4_7/api_v3";
   });
 
   afterEach(function () {
@@ -99,7 +99,7 @@ describe('OttAnalyticsPlugin', function () {
     player = loadPlayer(config);
     player.addEventListener(player.Event.MEDIA_LOADED, () => {
       const payload = JSON.parse(sendSpy.lastCall.args[0]);
-      verifyPayloadProperties(payload.ks, payload.bookmark);
+      verifyPayloadProperties(payload.vs, payload.bookmark);
       payload.bookmark.playerData.action.should.equal("LOAD");
       done();
     });
@@ -111,7 +111,7 @@ describe('OttAnalyticsPlugin', function () {
     player = loadPlayer(config);
     player.addEventListener(player.Event.MEDIA_LOADED, () => {
       const payload = JSON.parse(sendSpy.lastCall.args[0]);
-      verifyPayloadProperties(payload.ks, payload.bookmark);
+      verifyPayloadProperties(payload.vs, payload.bookmark);
       payload.bookmark.playerData.action.should.equal("LOAD");
       config.playback = {preload: "none"};
       done();
@@ -122,7 +122,7 @@ describe('OttAnalyticsPlugin', function () {
     player = loadPlayer(config);
     player.addEventListener(player.Event.FIRST_PLAY, () => {
       const payload = JSON.parse(sendSpy.lastCall.args[0]);
-      verifyPayloadProperties(payload.ks, payload.bookmark);
+      verifyPayloadProperties(payload.vs, payload.bookmark);
       payload.bookmark.playerData.action.should.equal("FIRST_PLAY");
       done();
     });
@@ -133,7 +133,7 @@ describe('OttAnalyticsPlugin', function () {
     player = loadPlayer(config);
     player.addEventListener(player.Event.PAUSE, () => {
       const payload = JSON.parse(sendSpy.lastCall.args[0]);
-      verifyPayloadProperties(payload.ks, payload.bookmark);
+      verifyPayloadProperties(payload.vs, payload.bookmark);
       payload.bookmark.playerData.action.should.equal("PAUSE");
       done();
     });
@@ -150,7 +150,7 @@ describe('OttAnalyticsPlugin', function () {
     });
     player.addEventListener(player.Event.ENDED, () => {
       const payload = JSON.parse(sendSpy.lastCall.args[0]);
-      verifyPayloadProperties(payload.ks, payload.bookmark);
+      verifyPayloadProperties(payload.vs, payload.bookmark);
       payload.bookmark.playerData.action.should.equal("FINISH");
       done();
     });
@@ -164,7 +164,7 @@ describe('OttAnalyticsPlugin', function () {
     });
     player.addEventListener(player.Event.TIME_UPDATE, () => {
       const payload = JSON.parse(sendSpy.lastCall.args[0]);
-      verifyPayloadProperties(payload.ks, payload.bookmark);
+      verifyPayloadProperties(payload.vs, payload.bookmark);
       if (player.currentTime == 1.5) {
         payload.bookmark.playerData.action.should.equal("HIT");
       }
